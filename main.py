@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 import uvicorn
-from mangum import Mangum
 from fastapi.middleware.cors import CORSMiddleware
 
 import pandas as pd 
@@ -9,7 +8,6 @@ from sklearn.linear_model import LogisticRegression
 import joblib
 
 app = FastAPI()
-handler = Mangum(app)
 
 origins = [
     "*",
@@ -42,3 +40,6 @@ async def input(sulphates: float, alcohol: float, volatile_acidity: float, total
 def predict(wine):
     prediction = model.predict(wine)
     return prediction
+    
+if __name__ == "__main__":
+  uvicorn.run("server.api:app", host="0.0.0.0", port=8000, reload=True)
