@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 
 import pandas as pd 
@@ -22,8 +23,7 @@ app.add_middleware(
 model = joblib.load('gb_model.pkl')
 sc = joblib.load('scaler.pkl')
 
-# wine = pd.DataFrame(wine, columns=['sulphates', 'alcohol', 'volatile acidity', 'total sulfur dioxide', 'density'])
-@app.get("/")
+@app.get("/", tags=["Root"])
 async def root():
     return {"message": "Hello World"}
 
@@ -40,4 +40,6 @@ async def input(sulphates: float, alcohol: float, volatile_acidity: float, total
 def predict(wine):
     prediction = model.predict(wine)
     return prediction
-
+    
+if __name__ == "__main__":
+  uvicorn.run("server.api:app", host="0.0.0.0", port=8000, reload=True)
