@@ -23,7 +23,7 @@ app.add_middleware(
 model = joblib.load('gb_model.pkl')
 sc = joblib.load('scaler.pkl')
 
-@app.get("/", tags=["Root"])
+@app.get("/")
 async def root():
     return {"message": "Hello World"}
 
@@ -34,12 +34,9 @@ async def input(sulphates: float, alcohol: float, volatile_acidity: float, total
     wine_new = sc.transform(wine)
     prediction = predict(wine_new)
     cat = str(prediction[0])
-    
+    print(cat)
     return {"prediction": cat}
 
 def predict(wine):
     prediction = model.predict(wine)
     return prediction
-    
-if __name__ == "__main__":
-  uvicorn.run("server.api:app", host="0.0.0.0", port=8000, reload=True)
